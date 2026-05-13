@@ -113,25 +113,19 @@ Each invoice creates its own email output file.
 
 # 📁 Project Structure
 
+
 ```text
 finance-followup-agent/
 │
-├── data/
-│   └── invoices.csv
-│
-├── logs/
-│   └── audit_log.json
-│
-├── output/
-│   └── generated email files
-│
+├── .env.example
+├── .gitignore
+├── README.md
 ├── agent.py
 ├── demo.py
-├── requirements.txt
-├── README.md
-├── .env.example
-└── .gitignore
+├── invoices.csv
+└── requirements.txt
 ```
+
 
 ---
 
