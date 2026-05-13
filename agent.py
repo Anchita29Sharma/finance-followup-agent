@@ -17,10 +17,8 @@ import anthropic
 # Load environment variables
 load_dotenv()
 
-# ============================================================
-# CONFIGURATION
-# ============================================================
 
+# CONFIGURATIOn
 DRY_RUN = os.getenv("DRY_RUN", "true").lower() != "false"
 
 # Create folders if they don't exist
@@ -46,10 +44,8 @@ client = anthropic.Anthropic(
     api_key=os.getenv("ANTHROPIC_API_KEY")
 )
 
-# ============================================================
-# ESCALATION LOGIC
-# ============================================================
 
+# ESCALATION LOGIC
 def get_stage(days_overdue: int, follow_up_count: int) -> dict:
 
     if days_overdue <= 0:
@@ -105,10 +101,7 @@ def get_stage(days_overdue: int, follow_up_count: int) -> dict:
             "escalate": True,
         }
 
-# ============================================================
 # INPUT SANITISATION
-# ============================================================
-
 INJECTION_PATTERNS = [
     r"ignore (previous|all|above|prior) instructions",
     r"system prompt",
@@ -145,10 +138,8 @@ def mask_email(email: str) -> str:
 
     return f"{local[:2]}***@{domain}"
 
-# ============================================================
-# EMAIL GENERATION
-# ============================================================
 
+# EMAIL GENERATION
 SYSTEM_PROMPT = """
 You are a professional finance assistant.
 
@@ -236,10 +227,8 @@ CTA:
         "raw": raw,
     }
 
-# ============================================================
-# AUDIT LOGGING
-# ============================================================
 
+# AUDIT LOGGING
 def log_to_audit(
     record,
     stage_info,
@@ -284,10 +273,7 @@ def log_to_audit(
     with open(AUDIT_LOG, "w", encoding="utf-8") as f:
         json.dump(existing, f, indent=2)
 
-# ============================================================
 # DATA LOADING
-# ============================================================
-
 REQUIRED_COLS = {
     "invoice_no",
     "client_name",
@@ -349,10 +335,7 @@ def compute_days_overdue(due_date):
 
     return (today - due_date.date()).days
 
-# ============================================================
 # MOCK EMAIL SENDER
-# ============================================================
-
 def send_email(to, subject, body):
 
     if DRY_RUN:
@@ -368,10 +351,7 @@ def send_email(to, subject, body):
 
     return False
 
-# ============================================================
 # MAIN AGENT LOOP
-# ============================================================
-
 def run_agent(invoice_file="data/invoices.csv"):
 
     log.info("=" * 60)
@@ -528,10 +508,8 @@ def run_agent(invoice_file="data/invoices.csv"):
                 error=str(e),
             )
 
-    # ============================================================
+   
     # SUMMARY
-    # ============================================================
-
     print("\n" + "=" * 70)
 
     print("AGENT RUN SUMMARY")
@@ -552,10 +530,7 @@ def run_agent(invoice_file="data/invoices.csv"):
 
     return results
 
-# ============================================================
 # ENTRY POINT
-# ============================================================
-
 if __name__ == "__main__":
 
     import sys
