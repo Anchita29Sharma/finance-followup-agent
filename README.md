@@ -120,7 +120,8 @@ finance-followup-agent/
 │   ├── demo-run.png
 │   ├── agent-run.png
 │   ├── project-structure.png
-│   └── github-repo.png
+│   ├── github-repo.png
+│   └── demovideo.mp4
 │
 ├── .env.example
 ├── .gitignore
@@ -212,6 +213,23 @@ Dear Client,
 
 This is a friendly reminder regarding your pending invoice...
 ```
+
+---
+
+# 🎥 Project Demonstration
+
+This demo shows:
+
+- Running the finance follow-up agent
+- AI-generated payment reminder emails
+- Escalation logic workflow
+- Audit logging system
+- Dry-run email processing
+- End-to-end automation pipeline
+
+## ▶ Demo Video
+
+[Click here to watch the full demo](./assets/demovideo.mp4)
 
 ---
 
@@ -397,6 +415,8 @@ get_stage()
 - [x] Audit logging system
 - [x] Security mitigations documented
 - [x] Demo workflow included
+- [x] Demo video uploaded
+- [x] Screenshots added
 
 ---
 
@@ -412,6 +432,7 @@ Computer Science student passionate about:
 - Backend development
 
 ### GitHub
+
 https://github.com/Anchita29Sharma
 
 ---
