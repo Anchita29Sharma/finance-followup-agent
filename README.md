@@ -1,213 +1,423 @@
-# Finance Credit Follow-Up Email Agent
+# 💳 Finance Credit Follow-Up Email Agent
 
-AI agent that automates payment follow-up emails for overdue invoices. Reads pending credit records, figures out how overdue each one is, and generates a personalised email at the right tone for that stage — or flags it for human review if it's gone past 30 days.
+An AI-powered finance automation system that generates intelligent payment reminder emails based on invoice overdue stages.
 
-Built for the AI Enablement Internship — Task 2.
-
----
-
-## What it does
-
-- Ingests invoice data from CSV or Excel
-- Computes days overdue automatically from today's date
-- Routes each invoice to the correct escalation stage (1–4, or legal flag)
-- Calls Claude to generate a personalised email with all invoice fields populated
-- Logs every action to an audit trail (with PII masked)
-- Saves each generated email as a text file
-- Defaults to dry-run mode — nothing actually sends unless you explicitly flip the flag
+Built using **Python**, **Pandas**, and **Anthropic Claude AI** with secure prompt handling, audit logging, escalation workflows, and dry-run email simulation.
 
 ---
 
-## Escalation stages
+# 🚀 Project Overview
 
-| Stage | Trigger | Tone |
-|-------|---------|------|
-| 1 | 1–7 days overdue | Warm, friendly |
-| 2 | 8–14 days overdue | Polite but firm |
-| 3 | 15–21 days overdue | Formal, serious |
-| 4 | 22–30 days overdue | Stern, final notice |
-| Escalation | 30+ days | No email — flagged for legal/finance |
+Managing overdue invoices manually is repetitive, time-consuming, and error-prone.
+
+This project automates the complete credit follow-up workflow by:
+
+- analyzing invoice overdue duration
+- determining escalation stages
+- generating professional AI-powered follow-up emails
+- maintaining audit logs
+- protecting against prompt injection attacks
+- supporting secure dry-run execution
+
+The system simulates how modern finance teams automate receivable collection workflows using AI.
 
 ---
 
-## Project structure
+# ✨ Features
 
+## 📌 Intelligent Multi-Stage Follow-Ups
+
+The system automatically categorizes invoices into escalation stages:
+
+| Stage | Days Overdue | Tone |
+|---|---|---|
+| Stage 1 | 1–7 days | Friendly reminder |
+| Stage 2 | 8–14 days | Polite but firm |
+| Stage 3 | 15–21 days | Formal warning |
+| Stage 4 | 22–30 days | Final notice |
+| Stage 5 | 30+ days | Escalation to finance/legal |
+
+---
+
+## 🤖 AI Email Generation
+
+Uses **Claude Sonnet 4** to generate:
+
+- professional subject lines
+- personalized payment reminders
+- escalation-stage specific messaging
+- structured business communication
+
+---
+
+## 🛡 Prompt Injection Protection
+
+The system sanitizes invoice fields before sending prompts to the LLM.
+
+Protection includes detection of:
+
+- instruction override attempts
+- script injection
+- jailbreak patterns
+- malicious prompt manipulation
+
+---
+
+## 📋 Audit Logging
+
+Every action is logged securely:
+
+- invoice details
+- escalation stage
+- generated subject line
+- timestamps
+- dry-run/live status
+- escalation events
+
+---
+
+## 🔒 Dry-Run Safety Mode
+
+By default:
+
+- emails are NOT actually sent
+- the system safely simulates delivery
+- ideal for testing and demos
+
+---
+
+## 📂 Output Generation
+
+Generated emails are automatically stored inside:
+
+```text
+output/
 ```
-finance-agent/
-├── agent.py            # Main agent — run this with your API key
-├── demo.py             # Demo with mock data — no API key needed
+
+Each invoice creates its own email output file.
+
+---
+
+# 🛠 Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Core backend logic |
+| Pandas | Invoice data processing |
+| Anthropic Claude API | AI email generation |
+| python-dotenv | Environment variable management |
+| JSON | Audit logging |
+| Logging Module | Runtime logging |
+
+---
+
+# 📁 Project Structure
+
+```text
+finance-followup-agent/
+│
 ├── data/
-│   └── invoices.csv    # Sample invoice data
-├── output/             # Generated emails saved here (gitignored)
+│   └── invoices.csv
+│
 ├── logs/
-│   ├── agent.log       # Console log
-│   └── audit_log.json  # Full audit trail
-├── .env.example        # Copy to .env and add your key
-├── .gitignore
-└── requirements.txt
+│   └── audit_log.json
+│
+├── output/
+│   └── generated email files
+│
+├── agent.py
+├── demo.py
+├── requirements.txt
+├── README.md
+├── .env.example
+└── .gitignore
 ```
 
 ---
 
-## Setup
+# ⚙ Installation
+
+## 1️⃣ Clone Repository
 
 ```bash
-git clone <your-repo-url>
-cd finance-agent
+git clone https://github.com/Anchita29Sharma/finance-followup-agent.git
+```
 
-# Install dependencies
+---
+
+## 2️⃣ Move into Project Folder
+
+```bash
+cd finance-followup-agent
+```
+
+---
+
+## 3️⃣ Install Dependencies
+
+```bash
 pip install -r requirements.txt
-
-# Set up environment
-cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
-
-# Run demo (no API key needed)
-python demo.py
-
-# Run the actual agent
-python agent.py
-
-# Point to a different invoice file
-python agent.py data/my_invoices.xlsx
 ```
 
 ---
 
-## CSV format
+# 🔐 Environment Setup
 
-Your invoice file needs these columns:
+Create a `.env` file:
 
-| Column | Description |
-|--------|-------------|
-| `invoice_no` | Unique invoice ID |
-| `client_name` | First name (used in casual emails) |
-| `client_formal_name` | Formal name e.g. "Mr. Sharma" |
-| `company` | Company name |
-| `amount` | Amount due (numeric) |
-| `currency` | e.g. INR, USD |
-| `due_date` | YYYY-MM-DD format |
-| `contact_email` | Debtor's email |
-| `follow_up_count` | How many follow-ups already sent |
-| `payment_link` | Direct payment URL |
-| `finance_contact` | Your finance team's email |
+```env
+ANTHROPIC_API_KEY=your_api_key_here
+DRY_RUN=true
+```
 
 ---
 
-## Technical Stack & Decision Log
+# ▶ Running the Project
 
-### LLM: Claude claude-sonnet-4-20250514 (Anthropic)
-
-Chose Sonnet over GPT-4o for a few reasons. First, the structured output behaviour is more consistent — the SUBJECT/BODY format held up across all test runs without needing retry logic. Second, cost: Sonnet is cheaper per token than GPT-4o for the same quality on a text-generation task like this. Third, I'm already using the Anthropic SDK which keeps the dependency footprint small.
-
-Alternatives considered: GPT-4o would also work well here. Gemini 1.5 Flash is the cheapest option but tone adherence was less reliable in informal testing. Llama 3 local would eliminate API costs and data-privacy concerns entirely — worth considering for a production deployment.
-
-### Agent Framework: None (intentional)
-
-Task 2 doesn't need a full agent framework like LangChain or CrewAI. Those frameworks add value when you need multi-step reasoning loops, tool use, or multiple agents collaborating. Here the logic is:
-
-1. Load data
-2. Compute days overdue
-3. Pick a stage
-4. Generate email
-5. Log it
-
-That's a pipeline, not an agent loop. Adding LangChain here would mean importing a heavy dependency to do what five functions already do clearly. The code is easier to read, test, and debug without it.
-
-If this were extended (e.g. agent autonomously checking payment status via bank API, then deciding whether to send), a framework would make sense.
-
-### Prompt design
-
-Two-part prompt: a system prompt that locks the LLM to email-only output with a fixed SUBJECT/BODY format, and a user prompt that injects all invoice data plus the stage context.
-
-The system prompt is deliberately restrictive — it tells the model exactly what it can and can't do (no discounts, no legal threats except stage 4, no generic emails). This reduces hallucination risk significantly.
-
-The user prompt uses f-strings with explicit field labels rather than passing raw CSV values. This makes injection harder because each field has a declared purpose before the value appears.
-
----
-
-## Security mitigations
-
-### Prompt injection
-
-All CSV field values are passed through `sanitise()` before going into the prompt. The function checks for known injection patterns (`ignore previous instructions`, `act as`, `system prompt`, etc.) and raises a `ValueError` to skip the record rather than process it. HTML tags are stripped as well.
-
-The system prompt is structured and restrictive — it tells the model it only writes emails and specifies the exact output format. An injection attempt in a client name field would land inside a tightly scoped context with a fixed job description, which limits what it could do even if it got through.
-
-### Data privacy / PII
-
-Emails (the most sensitive field) are masked in all log output using `mask_email()` — `rajesh@sharmaent.com` becomes `ra***@sharmaent.com`. The audit log stores masked emails only, never full addresses.
-
-Invoice data goes to the Anthropic API. For a production deployment where PII cannot leave your network, the right call is to either use a locally hosted model (Llama 3 via Ollama) or strip personally identifying fields before the API call and re-inject them after generation.
-
-### API key handling
-
-Key lives in `.env` only. `.env` is in `.gitignore`. The code loads it with `python-dotenv` and never references it directly. `.env.example` shows the structure with a placeholder value.
-
-### Hallucination risk
-
-The system prompt bans the model from inventing information. The user prompt provides all required fields explicitly. Pydantic validation wasn't added here (the output format is simple enough to parse with basic string splits), but for a production system, wrapping the output in a Pydantic model and retrying on parse failure would be the next step.
-
-### Unauthorised access
-
-The agent currently runs as a CLI script — no exposed HTTP endpoint. If you add a FastAPI wrapper, add API key authentication and rate limiting before exposing it.
-
-### Email spoofing (if live sending is enabled)
-
-Configure SPF, DKIM, and DMARC for your sender domain. Use a verified sender address in your SMTP/SendGrid config. The agent defaults to dry-run mode precisely to prevent accidental sends during development — flip `DRY_RUN=false` only when you've verified your sender setup.
-
----
-
-## Deliverables checklist
-
-- [x] GitHub repo with source code, `.env.example`, `requirements.txt`, `README.md`
-- [x] Agent flow: data ingestion → escalation logic → LLM generation → dry-run send → audit log
-- [x] Sample outputs in `output/` (run `demo.py`)
-- [x] Audit trail in `logs/audit_log.json`
-- [x] Security mitigations documented above
-- [x] LLM choice justified
-- [x] Framework choice justified (and why none was the right call here)
-
----
-
-## Running the demo
+## Demo Mode (No API Required)
 
 ```bash
 python demo.py
 ```
 
-This generates all 5 stages of emails (stages 1–4 + escalation flag) using mock data, no API key needed. Output files land in `output/`, audit log in `logs/`.
+Runs a fully simulated workflow with mock-generated emails.
 
 ---
 
-## Agent flow diagram
+## AI Agent Mode
 
+```bash
+python agent.py
 ```
+
+Uses Claude AI to generate real finance follow-up emails.
+
+---
+
+# 📊 Example Workflow
+
+## Input Invoice
+
+```csv
+invoice_no,company,amount,due_date
+INV-2024-001,Sharma Enterprises,45000,2026-05-01
+```
+
+---
+
+## Generated Output
+
+```text
+Subject: Payment Reminder - Invoice #INV-2024-001
+
+Dear Client,
+
+This is a friendly reminder regarding your pending invoice...
+```
+
+---
+
+# 🧠 AI Prompt Engineering
+
+The project uses:
+
+- strict system prompts
+- controlled user prompts
+- structured output formatting
+- tone-based escalation logic
+
+This ensures:
+
+- professional consistency
+- reduced hallucination
+- safe enterprise-style responses
+
+---
+
+# 🔒 Security Considerations
+
+## Prompt Injection Protection
+
+The agent sanitizes all user-controlled invoice fields before they are inserted into prompts.
+
+Blocked patterns include:
+
+- `ignore previous instructions`
+- `system prompt`
+- `act as`
+- HTML/script injection
+- markdown/code block injection
+
+---
+
+## Hallucination Risk
+
+The system prompt explicitly restricts the model from inventing:
+- payment details
+- invoice numbers
+- dates
+- discounts
+- legal threats
+
+Only provided invoice data is allowed in responses.
+
+---
+
+## Unauthorised Access
+
+The project currently runs as a local CLI application.
+
+If converted into an API service:
+- API key authentication
+- rate limiting
+- HTTPS
+- request validation
+
+should be added before deployment.
+
+---
+
+## Email Spoofing Protection
+
+If live email sending is enabled:
+- SPF
+- DKIM
+- DMARC
+
+should be configured for the sender domain.
+
+The system defaults to `DRY_RUN=true` to prevent accidental email delivery during development.
+
+---
+
+# 📌 Deliverables Checklist
+
+- [x] GitHub repository with complete source code
+- [x] `.env.example`
+- [x] `requirements.txt`
+- [x] `README.md`
+- [x] AI-powered follow-up generation
+- [x] Escalation workflow
+- [x] Dry-run email simulation
+- [x] Audit logging system
+- [x] Security mitigations documented
+- [x] Demo workflow included
+
+---
+
+# ▶ Running the Demo
+
+```bash
+python demo.py
+```
+
+This generates all follow-up stages using mock invoice data.
+
+Output files are saved in:
+
+```text
+output/
+```
+
+Audit logs are saved in:
+
+```text
+logs/
+```
+
+No API key is required for demo mode.
+
+---
+
+# 🔄 Agent Flow Diagram
+
+```text
 CSV/Excel
     │
     ▼
 load_invoices()
-    │  validate columns, parse dates
+    │
     ▼
 compute_days_overdue()
     │
     ▼
 get_stage()
     │
-    ├── stage 0 (not overdue) ────────────► skip
+    ├── stage 0 → skip
     │
-    ├── stage 1–4 ──► sanitise() ──► generate_email() ──► send_email()
-    │                                      │                    │
-    │                               Claude API call         dry-run log
-    │                                      │                or SMTP send
-    │                                      ▼
-    │                               parse subject/body
-    │                                      │
-    │                               save to output/
-    │                                      │
-    │                               log_to_audit()
+    ├── stage 1–4
+    │       │
+    │       ▼
+    │ sanitise()
+    │       │
+    │       ▼
+    │ generate_email()
+    │       │
+    │       ▼
+    │ send_email()
+    │       │
+    │       ▼
+    │ log_to_audit()
     │
-    └── stage 5 (30+ days) ───────────────► flag for legal review
-                                            log_to_audit()
-                                            no email sent
+    └── stage 5
+            │
+            ▼
+      Escalation flag
 ```
+
+---
+
+# 🎯 Use Cases
+
+- Finance departments
+- Accounts receivable teams
+- Credit collection workflows
+- Invoice reminder automation
+- AI-powered business communication systems
+
+---
+
+# 🚀 Future Improvements
+
+- SMTP email integration
+- Web dashboard
+- Analytics panel
+- Database integration
+- PDF invoice attachment support
+- Multi-language support
+- Admin portal
+
+---
+
+# 👩‍💻 Author
+
+### Anchita Sharma
+
+Computer Science student passionate about:
+
+- AI systems
+- Cybersecurity
+- Automation
+- Practical backend development
+
+GitHub:
+https://github.com/Anchita29Sharma
+
+---
+
+# ⭐ Project Highlights
+
+This project demonstrates:
+
+- AI integration in business workflows
+- secure backend automation
+- prompt engineering
+- audit logging systems
+- escalation workflow design
+- production-style Python architecture
+
+---
+
+# 📄 License
+
+This project is built for educational and internship evaluation purposes.
