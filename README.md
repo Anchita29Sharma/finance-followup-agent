@@ -122,12 +122,6 @@ finance-followup-agent/
 │   ├── project-structure.png
 │   └── github-repo.png
 │
-├── logs/
-│   └── audit_log.json
-│
-├── output/
-│   └── generated email files
-│
 ├── .env.example
 ├── .gitignore
 ├── README.md
