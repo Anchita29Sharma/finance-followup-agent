@@ -8,17 +8,11 @@ import json
 from datetime import date
 from pathlib import Path
 
-# ============================================================
 # CREATE REQUIRED FOLDERS
-# ============================================================
-
 Path("output").mkdir(exist_ok=True)
 Path("logs").mkdir(exist_ok=True)
 
-# ============================================================
 # MOCK INVOICE DATA
-# ============================================================
-
 MOCK_INVOICES = [
     {
         "invoice_no": "INV-2024-001",
@@ -82,10 +76,8 @@ MOCK_INVOICES = [
     },
 ]
 
-# ============================================================
-# MOCK EMAIL OUTPUTS
-# ============================================================
 
+# MOCK EMAIL OUTPUTS
 MOCK_EMAILS = {
     1: {
         "subject": "Quick Reminder - Invoice #INV-2024-001 | INR 45,000 Due",
@@ -160,10 +152,7 @@ Finance Department"""
     }
 }
 
-# ============================================================
 # DEMO RUNNER
-# ============================================================
-
 def run_demo():
 
     print("=" * 65)
@@ -186,10 +175,8 @@ def run_demo():
         print(f"Amount  : {inv['currency']} {inv['amount']:,}")
         print(f"Overdue : {inv['days_overdue']} days -> Stage {stage}")
 
-        # ====================================================
+        
         # STAGE 5 ESCALATION
-        # ====================================================
-
         if stage == 5:
 
             print(f"\n{email['escalation_note']}")
@@ -215,10 +202,7 @@ def run_demo():
                 f.write(f"Days Overdue: {inv['days_overdue']}\n")
                 f.write("Action Required: Finance/Legal Review\n")
 
-        # ====================================================
         # EMAIL STAGES
-        # ====================================================
-
         else:
 
             print(f"\nSubject : {email['subject']}")
@@ -254,10 +238,7 @@ def run_demo():
                 "subject": email["subject"],
             })
 
-    # ============================================================
     # SAVE AUDIT LOG
-    # ============================================================
-
     with open(
         "logs/audit_log.json",
         "w",
@@ -266,10 +247,9 @@ def run_demo():
 
         json.dump(audit_entries, f, indent=2)
 
-    # ============================================================
+   
     # FINAL SUMMARY
-    # ============================================================
-
+    
     print("\n" + "=" * 65)
 
     print("DEMO COMPLETE")
