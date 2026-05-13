@@ -2,7 +2,7 @@
 
 An AI-powered finance automation system that generates intelligent payment reminder emails based on invoice overdue stages.
 
-Built using **Python**, **Pandas**, and **Anthropic Claude AI** with secure prompt handling, audit logging, escalation workflows, and dry-run email simulation.
+Built using **Python**, **Pandas**, and **Anthropic Claude AI** with secure prompt handling, escalation workflows, audit logging, and dry-run email simulation.
 
 ---
 
@@ -113,9 +113,20 @@ Each invoice creates its own email output file.
 
 # 📁 Project Structure
 
-
 ```text
 finance-followup-agent/
+│
+├── assets/
+│   ├── demo-run.png
+│   ├── agent-run.png
+│   ├── project-structure.png
+│   └── github-repo.png
+│
+├── logs/
+│   └── audit_log.json
+│
+├── output/
+│   └── generated email files
 │
 ├── .env.example
 ├── .gitignore
@@ -125,7 +136,6 @@ finance-followup-agent/
 ├── invoices.csv
 └── requirements.txt
 ```
-
 
 ---
 
@@ -211,6 +221,40 @@ This is a friendly reminder regarding your pending invoice...
 
 ---
 
+# 📸 Project Screenshots
+
+## ▶ Demo Run
+
+Shows generated AI-powered follow-up emails for multiple escalation stages.
+
+![Demo Run](assets/demo-run.png)
+
+---
+
+## ⚙ Agent Execution
+
+Displays backend invoice processing, escalation logic, and audit handling.
+
+![Agent Run](assets/agent-run.png)
+
+---
+
+## 🧩 Project Structure
+
+VS Code project structure with agent implementation and execution flow.
+
+![Project Structure](assets/project-structure.png)
+
+---
+
+## 🌐 GitHub Repository
+
+Repository structure and uploaded project files.
+
+![GitHub Repository](assets/github-repo.png)
+
+---
+
 # 🧠 AI Prompt Engineering
 
 The project uses:
@@ -247,6 +291,7 @@ Blocked patterns include:
 ## Hallucination Risk
 
 The system prompt explicitly restricts the model from inventing:
+
 - payment details
 - invoice numbers
 - dates
@@ -262,6 +307,7 @@ Only provided invoice data is allowed in responses.
 The project currently runs as a local CLI application.
 
 If converted into an API service:
+
 - API key authentication
 - rate limiting
 - HTTPS
@@ -274,6 +320,7 @@ should be added before deployment.
 ## Email Spoofing Protection
 
 If live email sending is enabled:
+
 - SPF
 - DKIM
 - DMARC
@@ -284,42 +331,6 @@ The system defaults to `DRY_RUN=true` to prevent accidental email delivery durin
 
 ---
 
-# 📌 Deliverables Checklist
-
-- [x] GitHub repository with complete source code
-- [x] `.env.example`
-- [x] `requirements.txt`
-- [x] `README.md`
-- [x] AI-powered follow-up generation
-- [x] Escalation workflow
-- [x] Dry-run email simulation
-- [x] Audit logging system
-- [x] Security mitigations documented
-- [x] Demo workflow included
-
----
-
-# ▶ Running the Demo
-
-```bash
-python demo.py
-```
-
-This generates all follow-up stages using mock invoice data.
-
-Generated email files will automatically be created inside:
-
-```text
-output/
-```
-
-Audit logs will automatically be created inside:
-
-```text
-logs/
-```
-
-No API key is required for demo mode.
 # 🔄 Agent Flow Diagram
 
 ```text
@@ -380,18 +391,33 @@ get_stage()
 
 ---
 
+# 📌 Deliverables Checklist
+
+- [x] GitHub repository with complete source code
+- [x] `.env.example`
+- [x] `requirements.txt`
+- [x] `README.md`
+- [x] AI-powered follow-up generation
+- [x] Escalation workflow
+- [x] Dry-run email simulation
+- [x] Audit logging system
+- [x] Security mitigations documented
+- [x] Demo workflow included
+
+---
+
 # 👩‍💻 Author
 
-### Anchita Sharma
+## Anchita Sharma
 
 Computer Science student passionate about:
 
 - AI systems
 - Cybersecurity
 - Automation
-- Practical backend development
+- Backend development
 
-GitHub:
+### GitHub
 https://github.com/Anchita29Sharma
 
 ---
