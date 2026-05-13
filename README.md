@@ -307,22 +307,19 @@ python demo.py
 
 This generates all follow-up stages using mock invoice data.
 
-Output files are saved in:
+Generated email files will automatically be created inside:
 
 ```text
 output/
 ```
 
-Audit logs are saved in:
+Audit logs will automatically be created inside:
 
 ```text
 logs/
 ```
 
 No API key is required for demo mode.
-
----
-
 # 🔄 Agent Flow Diagram
 
 ```text
